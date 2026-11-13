@@ -28,7 +28,7 @@ button,input,select{font:inherit;color:inherit}
 
 header{text-align:center;padding:24px 0 28px}
 h1{margin:0;font:400 clamp(40px,11vw,72px)/1 var(--title);letter-spacing:.34em;padding-left:.34em;text-wrap:balance}
-h1{font-family:'VALORANT',sans-serif} /* 상단 VANTAGE 제목에만 VALORANT 폰트 적용 */
+h1{font-family:'VALORANT',sans-serif} /* 상단 VTRACK 제목에만 VALORANT 폰트 적용 */
 h1 em{font-style:normal;color:var(--accent)}
 .sub{margin-top:10px;color:var(--mute);font:500 12px var(--display);letter-spacing:.42em;padding-left:.42em;text-transform:uppercase}
 
@@ -353,7 +353,7 @@ async function shareCard(){
   if(sp){g.globalAlpha=.28;const r=H/sp.height;g.drawImage(sp,(W-sp.width*r)/2,0,sp.width*r,H);g.globalAlpha=1}
   const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#0c0f14cc');gr.addColorStop(.5,'#0c0f1466');gr.addColorStop(1,'#0c0f14ee');g.fillStyle=gr;g.fillRect(0,0,W,H);
   const F=`"${CONFIG.FONT_DISPLAY}","${CONFIG.FONT_BODY}",sans-serif`;g.textAlign='center';
-  g.fillStyle='#e8ecf2';g.font=`400 64px 'TitleFont',${F}`;g.letterSpacing='22px';g.fillText('VANTAGE',W/2+11,170);g.letterSpacing='0px';
+  g.fillStyle='#e8ecf2';g.font=`400 64px 'TitleFont',${F}`;g.letterSpacing='22px';g.fillText('VTRACK',W/2+11,170);g.letterSpacing='0px';
   if(ti)g.drawImage(ti,W/2-90,260,180,180);
   g.font=`400 72px ${F}`;g.fillStyle='#fff';g.fillText(c.name,W/2,520);
   g.font=`400 36px ${F}`;g.fillStyle='#8a94a6';g.fillText('#'+c.tag+' · '+(c.cur?tierLabel(c.cur.tier.id,c.cur.rr,1):tierName(s.tier)),W/2,575);
@@ -369,8 +369,8 @@ async function shareCard(){
   g.fillStyle='#8a94a6';g.font=`400 28px ${F}`;g.fillText(s.n+'경기 '+s.wins+'승 '+(s.n-s.wins)+'패 · 막대는 최근 10경기',W/2,1780);
   cv.toBlob(async b=>{
     if(!b)return msg('카드를 만들 수 없습니다. 이미지 로드가 차단됐을 수 있습니다.',1);
-    const f=new File([b],'vantage-'+c.name+'.png',{type:'image/png'});
-    try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'VANTAGE 전적'});return}}catch(e){if(e.name==='AbortError')return}
+    const f=new File([b],'vtrack-'+c.name+'.png',{type:'image/png'});
+    try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'VTRACK 전적'});return}}catch(e){if(e.name==='AbortError')return}
     const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;a.click();
   });
 }
