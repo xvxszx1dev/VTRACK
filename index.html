@@ -6,13 +6,17 @@
 <title>VTRACK 발로란트 전적 사이트</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/png" href="icon.png">
 <link href="https://fonts.cdnfonts.com/css/valorant" rel="stylesheet">
 <style>
 /* 레이아웃: 중앙 정렬 타이틀 → 검색 → 프로필 요약 → 맵 배경 매치 리스트. 모바일 우선 단일 컬럼 */
 :root{
   --bg:#0c0f14; --panel:#141922; --line:#232b38; --fg:#e8ecf2; --mute:#8a94a6;
   --accent:#ff4655; --win:#14a86b; --loss:#d6384a;
-  --g1:#46e6a8; --g2:#9be04a; --g3:#f2c94c; --g4:#f2994a; --g5:#ff4655;
+  --g1:#46e1e6; --g2:#9be04a; --g3:#e2b325; --g4:#ff7d7d; --g5:#d94a4a;
+  /* 등급 아이콘 아웃라인: 어두운 4·5등급도 배경에서 보이도록 같은 계열의 밝은 색 */
+  --o1:#243233; --o2:#3a551c; --o3:rgb(70, 62, 37); --o4:#880d0d; --o5:#460000;
+  --up:#46e6a8; --down:#ff4655;
   --display:'Black Han Sans','Noto Sans KR',sans-serif; --body:'Black Han Sans',system-ui,sans-serif; --title:'Black Han Sans',sans-serif;
 }
 *{box-sizing:border-box}
@@ -44,7 +48,7 @@ form.search{display:flex;gap:8px;flex-wrap:wrap}
 .chip{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;cursor:pointer}
 .chip.me{border-color:var(--accent)}
 .more{justify-self:center}
-.up{color:var(--g1)}.down{color:var(--g5)}
+.up{color:var(--up)}.down{color:var(--down)}
 .res .up{color:#9ff5c8}.res .down{color:#ffb3bb}
 #msg{margin-top:16px;color:var(--mute);text-align:center;min-height:22px}
 #msg.err{color:var(--accent)}
@@ -57,7 +61,7 @@ form.search{display:flex;gap:8px;flex-wrap:wrap}
 .ph .tr{color:var(--mute);font-size:13px}
 .ph .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .overall{display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap}
-.bigg{width:96px;height:96px;border-radius:12px;display:grid;place-items:center;font:700 52px var(--display);color:#0c0f14}
+.bigg{width:96px;height:96px;display:grid;place-items:center;font:700 52px var(--display);color:#0c0f14}
 .bigg small{display:block;font-size:12px;letter-spacing:.1em;margin-top:-6px;text-align:center}
 .overall .desc{flex:1 1 220px;min-width:0}
 .overall .desc b{font:700 20px var(--display)}
@@ -81,8 +85,8 @@ form.search{display:flex;gap:8px;flex-wrap:wrap}
 .kd small{display:block;color:#ffffffb3;font-size:12px}
 .res{text-align:right;font-size:13px;color:#ffffffcc}
 .res b{display:block;font:700 18px var(--display);color:#fff}
-.gb{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;font:700 22px var(--display);color:#0c0f14}
-.g1{background:var(--g1)}.g2{background:var(--g2)}.g3{background:var(--g3)}.g4{background:var(--g4)}.g5{background:var(--g5)}
+.gb{width:40px;height:40px;display:grid;place-items:center;font:700 22px var(--display);color:#0c0f14}
+.g1{color:var(--g1)}.g2{color:var(--g2)}.g3{color:var(--g3)}.g4{color:var(--g4)}.g5{color:var(--g5)}
 
 dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:0;width:min(760px,calc(100% - 24px));max-height:88vh}
 dialog::backdrop{background:#000b}
@@ -91,7 +95,7 @@ dialog::backdrop{background:#000b}
 .dh button{background:none;border:0;color:var(--mute);font-size:22px;cursor:pointer}
 .team{padding:12px 14px}
 .team h3{margin:0 0 8px;font:700 14px var(--display);letter-spacing:.08em}
-.team.w h3{color:var(--g1)}.team.l h3{color:var(--accent)}
+.team.w h3{color:var(--up)}.team.l h3{color:var(--accent)}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
 th{color:var(--mute);font-weight:500;text-align:right;padding:4px 6px}
@@ -101,7 +105,11 @@ td.pl{display:flex;align-items:center;gap:8px;text-align:left}
 td.pl img{width:26px;height:26px}
 td.pl img.t{width:24px;height:24px}
 tr.me td{background:#ffffff10}
-.gb.s{width:28px;height:28px;font-size:15px;display:inline-grid;vertical-align:middle}
+.gb.s{width:30px;height:30px;font-size:15px;display:inline-grid;vertical-align:middle}
+.gb svg{width:100%;height:100%}.bigg svg{width:96px;height:96px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;color:var(--mute);font-size:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend .gb.s{width:22px;height:22px}
 
 .note{margin-top:28px;color:var(--mute);font-size:12px;text-align:center}
 @media (max-width:520px){
@@ -126,7 +134,7 @@ tr.me td{background:#ffffff10}
   <div class="chips" id="favs"></div>
   <div id="msg"></div>
   <div id="out"></div>
-  <p class="note">등급은 티어별 평균 수치 대비 상대 성과로 계산한 추정값이며 실제 MMR이 아닙니다.<br>v2</br></p>
+  <p class="note">등급은 티어별 평균 수치 대비 상대 성과로 계산한 추정값이며 실제 MMR이 아닙니다.<br>v3</br></p>
 </div>
 <dialog id="dlg"></dialog>
 
@@ -169,6 +177,9 @@ const BASE={acs:[175,185,195,205,215,225,235,245,255],adr:[122,128,134,140,146,1
 const GRADE_INFO={1:['승급 확정','이 흐름이면 티어 상승이 거의 확실합니다.'],2:['승급 가능','꾸준히 하면 티어 상승이 가능합니다.'],
   3:['현 티어 유지','이 티어대에서 오래 머물 가능성이 높습니다.'],4:['하락 주의','이 상태가 이어지면 티어가 내려갈 수 있습니다.'],
   5:['대폭 하락 위험','현재 성과로는 큰 폭의 하락이 예상됩니다.']};
+// 등급 아이콘: 1 이중 상승 / 2 상승 / 3 유지 / 4 하락 / 5 이중 하락 (24x24 선 아이콘)
+const GICON={1:['M6 12l6-6 6 6','M6 19l6-6 6 6'],2:['M6 15l6-6 6 6'],3:['M6 9h12','M6 15h12'],4:['M6 9l6 6 6-6'],5:['M6 5l6 6 6-6','M6 12l6 6 6-6']};
+const gIcon=g=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="${GRADE_INFO[g][0]}"><g style="stroke:var(--o${g})" stroke-width="6.4">${GICON[g].map(d=>`<path d="${d}"/>`).join('')}</g><g stroke="currentColor" stroke-width="3">${GICON[g].map(d=>`<path d="${d}"/>`).join('')}</g></svg>`;
 function tierGroup(t){return t>=3?Math.min(8,Math.floor((t-3)/3)):3}
 function perfIndex(s,tier){const g=tierGroup(tier);
   return .34*s.acs/BASE.acs[g]+.28*s.adr/BASE.adr[g]+.26*s.kd/BASE.kd[g]+.12*s.hs/BASE.hs[g]}
@@ -204,16 +215,16 @@ async function search(raw,region){
   const who=`${region}/pc/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`;
   const mq=s=>{const q=new URLSearchParams({size:CONFIG.PAGE_SIZE,start:s});if(CONFIG.MODE)q.set('mode',CONFIG.MODE);return `v4/matches/${who}?${q}`};
   const failErr=s=>new Error(s===404?'해당 아이디의 전적을 찾을 수 없습니다.':s===401||s===403?'API 키가 올바르지 않습니다.':s===429?'요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.':'조회에 실패했습니다. ('+s+')');
-  const seen=new Set();let warn='',cur=null,peak=null,start=0,more=true,loading=false,limit=CONFIG.MAX_MATCHES;const hist={};
+  const seen=new Set();let warn='',cur=null,start=0,more=true,loading=false,limit=CONFIG.MAX_MATCHES;const hist={};
   const add=page=>page.forEach(x=>{const mid=x.metadata.match_id;if(mid&&seen.has(mid))return;if(mid)seen.add(mid);const b=build(x,name,tag);if(b)CUR.matches.push(b)});
   const refresh=()=>{ // 늦게 도착한 MMR·RR 기록도 여기서 합쳐 다시 그린다
     if(tok!==TOK||!CUR)return;
-    CUR.cur=cur;CUR.peak=bestPeak(peak,cur,hist,manualPeak(CUR));CUR.matches.forEach(x=>x.rr=hist[x.raw.metadata.match_id]);
+    CUR.cur=cur;CUR.matches.forEach(x=>x.rr=hist[x.raw.metadata.match_id]);
     CUR.matches.sort((a,b)=>b.when-a.when);CUR.sum=summarize(CUR.matches,cur&&cur.tier.id);render();
   };
   try{
     // MMR(현재·최고 티어)과 RR 기록은 매치와 동시에 요청하고, 먼저 오는 대로 화면에 반영한다
-    const pMmr=api('v3/mmr/'+who).then(r=>{if(r.ok&&r.j.data){cur=r.j.data.current;peak=r.j.data.peak;refresh()}}).catch(()=>{});
+    const pMmr=api('v3/mmr/'+who).then(r=>{if(r.ok&&r.j.data){cur=r.j.data.current;refresh()}}).catch(()=>{});
     const loadHist=()=>api('v2/stored-mmr-history/'+who+'?size='+limit).then(r=>{const d=r.j.data;(Array.isArray(d)?d:(d&&d.history)||[]).forEach(e=>hist[e.match_id]=e);refresh()}).catch(()=>{});
     const pHist=loadHist();
     const fetchPages=async upto=>{
@@ -266,10 +277,6 @@ function summarize(ms,tier0){
 
 /* ---------- 렌더 ---------- */
 function msg(t,err){const m=$('#msg');m.textContent=t;m.className=err?'err':''}
-// API의 peak.rr은 그 티어에 처음 도달한 순간의 점수(0)로 오는 경우가 있어서, 현재 점수와 RR 기록 중 가장 높은 (티어, 점수)를 최고로 쓴다
-const manualPeak=c=>{const e=Object.entries(CONFIG.PEAK||{}).find(([k])=>k.toLowerCase()===id(c));return e?{tier:{id:e[1].tier},rr:e[1].rr}:null};
-const bestPeak=(peak,cur,hist,manual)=>{let b=peak;const up=e=>{if(e&&e.tier&&(!b||e.tier.id>b.tier.id||(e.tier.id===b.tier.id&&e.rr>b.rr)))b=e};
-  up(cur);up(manual);Object.values(hist).forEach(up);return b&&b.tier.id?b:null};
 const tierName=id=>(A.tiers[id]||{}).name||'언랭크';
 // 불멸(24)부터는 티어 안 구간이 없고 점수(RR)가 곧 순위라서 점수를 함께 보여준다
 const tierLabel=(id,rr,always)=>tierName(id)+((id>=24||(always&&rr!=null))?' · '+rr+'RR':'');
@@ -283,10 +290,10 @@ function render(){
   $('#out').innerHTML=`
   <section class="profile">
     <div class="ph">${tierImg(s.tier,'')}
-      <div><div class="nm">${esc(c.name)} <small>#${esc(c.tag)}</small></div><div class="tr">${esc(c.cur?tierLabel(c.cur.tier.id,c.cur.rr,1):tierName(s.tier))} · 최근 ${s.n}경기</div>${c.peak?`<div class="tr">최고 티어 ${esc(tierLabel(c.peak.tier.id,c.peak.rr))}</div>`:''}</div>
+      <div><div class="nm">${esc(c.name)} <small>#${esc(c.tag)}</small></div><div class="tr">${esc(c.cur?tierLabel(c.cur.tier.id,c.cur.rr,1):tierName(s.tier))} · 최근 ${s.n}경기</div></div>
       <div class="acts"><button class="btn ghost" id="fav">${isFav?'★ 즐겨찾기 해제':'☆ 즐겨찾기'}</button><button class="btn ghost" id="mine">내 계정으로 설정</button><button class="btn ghost" id="share">스토리 카드 공유</button></div>
     </div>
-    <div class="overall"><div class="bigg g${s.grade}"><div>${s.grade}<small>등급</small></div></div>
+    <div class="overall"><div class="bigg g${s.grade}">${gIcon(s.grade)}</div>
       <div class="desc"><b>${GRADE_INFO[s.grade][0]}</b><p>${GRADE_INFO[s.grade][1]}</p></div></div>
     <div class="stats num">
       <div class="stat"><span>승률</span><b>${Math.round(s.wr*100)}%</b></div>
@@ -296,6 +303,7 @@ function render(){
       <div class="stat"><span>헤드샷</span><b>${Math.round(s.hs)}%</b></div>
       ${rs.n?`<div class="stat"><span>RR 변동 · ${rs.n}경기</span><b class="${rs.sum>=0?'up':'down'}">${sgn(rs.sum)}</b></div>`:''}
     </div>
+    <div class="legend">${[1,2,3,4,5].map(g=>`<span><i class="gb s g${g}">${gIcon(g)}</i>${GRADE_INFO[g][0]}</span>`).join('')}</div>
     <div class="form" aria-label="최근 경기 결과">${c.matches.map(m=>`<i class="dot" style="background:var(--${m.won?'win':'loss'})"></i>`).join('')}</div>
   </section>
   <div class="list">${c.matches.map((m,i)=>`
@@ -304,7 +312,7 @@ function render(){
       <img class="a" src="${(A.agents[m.me.agent.id]||{}).icon||''}" alt="${esc(m.me.agent.name)}">
       <div class="kd num"><b>${m.s.kd.toFixed(2)} KD</b><small>${m.s.k}/${m.s.d}/${m.s.a} · ${esc(m.map.ko)}</small></div>
       <div class="res num"><b>${m.team.rounds.won} : ${m.team.rounds.lost}</b>${rrTxt(m)}${ago(m.when)}</div>
-      <div class="gb g${m.grade}" title="${GRADE_INFO[m.grade][0]}">${m.grade}</div>
+      <div class="gb g${m.grade}" title="${GRADE_INFO[m.grade][0]}">${gIcon(m.grade)}</div>
     </button>`).join('')}${c.canMore&&c.canMore()?`<button class="btn ghost more" id="more">20경기 더 불러오기</button>`:''}</div>`;
   $('#fav').onclick=toggleFav;$('#mine').onclick=setMine;$('#share').onclick=shareCard;
   const mo=$('#more');if(mo)mo.onclick=()=>{mo.disabled=true;c.loadMore()};
@@ -317,7 +325,7 @@ function detail(m){
     return `<div class="team ${cls}"><h3>${label} · ${t.rounds.won}R</h3><div class="tw"><table class="num"><tr><th>플레이어</th><th>K/D/A</th><th>ACS</th><th>ADR</th><th>HS</th><th>등급</th></tr>
     ${rows(tid).map(p=>{const s=statsOf(p,m.rounds),g=matchGrade(p,m.rounds,t.won);
       return `<tr class="${p.puuid===m.me.puuid?'me':''}"><td class="pl">${tierImg(p.tier.id)}<img src="${(A.agents[p.agent.id]||{}).icon||''}" alt="${esc(p.agent.name)}">${esc(p.name)}<span style="color:var(--mute)">#${esc(p.tag)}</span></td>
-      <td>${s.k}/${s.d}/${s.a}</td><td>${Math.round(s.acs)}</td><td>${Math.round(s.adr)}</td><td>${Math.round(s.hs)}%</td><td><span class="gb s g${g}">${g}</span></td></tr>`}).join('')}</table></div></div>`};
+      <td>${s.k}/${s.d}/${s.a}</td><td>${Math.round(s.acs)}</td><td>${Math.round(s.adr)}</td><td>${Math.round(s.hs)}%</td><td><span class="gb s g${g}" title="${GRADE_INFO[g][0]}">${gIcon(g)}</span></td></tr>`}).join('')}</table></div></div>`};
   const other=x.teams.find(t=>t.team_id!==m.me.team_id).team_id;
   $('#dlg').innerHTML=`<div class="dh"><b>${esc(m.map.ko)} · ${m.won?'승리':'패배'} ${m.team.rounds.won}:${m.team.rounds.lost}${m.rr?' · '+sgn(m.rr.last_change)+' RR':''}</b><button aria-label="닫기" id="x">×</button></div>
     ${team('우리 팀',m.won?'w':'l',m.me.team_id)}${team('상대 팀',m.won?'l':'w',other)}`;
@@ -329,7 +337,7 @@ $('#dlg').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTa
 const id=c=>(c.name+'#'+c.tag).toLowerCase();
 function renderFavs(){
   const favs=store.get('favs',[]),mine=store.get('mine',null);
-  $('#favs').innerHTML=favs.map((f,i)=>`<button class="chip ${mine===f.id?'me':''}" data-i="${i}">${mine===f.id?'🏠 ':''}${esc(f.name)}#${esc(f.tag)}</button>`).join('');
+  $('#favs').innerHTML=favs.map((f,i)=>`<button class="chip ${mine===f.id?'me':''}" data-i="${i}">${mine===f.id?'⌂ ':''}${esc(f.name)}#${esc(f.tag)}</button>`).join('');
   document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const f=favs[b.dataset.i];$('#q').value=f.name+'#'+f.tag;$('#region').value=f.region;search($('#q').value,f.region)});
 }
 function toggleFav(){
@@ -344,7 +352,8 @@ function setMine(){
 }
 
 /* ---------- 인스타 스토리 카드 (1080x1920) ---------- */
-const GC={1:'#46e6a8',2:'#9be04a',3:'#f2c94c',4:'#f2994a',5:'#ff4655'};
+const GC={1:'#46e1e6',2:'#9be04a',3:'#e2b325',4:'#880d0d',5:'#460000'},GO={1:'#b2f6f8',2:'#d3f5a8',3:'#f7dd85',4:'#ff7d7d',5:'#d94a4a'};
+const cssv=(n,d)=>{try{return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||d}catch(e){return d}}; // CSS 토큰을 단일 기준으로 쓴다
 function img(src){return new Promise(r=>{if(!src)return r(null);const i=new Image();i.crossOrigin='anonymous';i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src})}
 async function shareCard(){
   const c=CUR,s=c.sum,W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
@@ -357,9 +366,8 @@ async function shareCard(){
   if(ti)g.drawImage(ti,W/2-90,260,180,180);
   g.font=`400 72px ${F}`;g.fillStyle='#fff';g.fillText(c.name,W/2,520);
   g.font=`400 36px ${F}`;g.fillStyle='#8a94a6';g.fillText('#'+c.tag+' · '+(c.cur?tierLabel(c.cur.tier.id,c.cur.rr,1):tierName(s.tier)),W/2,575);
-  if(c.peak){g.font=`400 30px ${F}`;g.fillText('최고 티어 '+tierLabel(c.peak.tier.id,c.peak.rr),W/2,622)}
-  g.fillStyle=GC[s.grade];g.beginPath();g.roundRect(W/2-190,650,380,380,36);g.fill();
-  g.fillStyle='#0c0f14';g.font=`400 260px ${F}`;g.fillText(s.grade,W/2,900);g.font=`400 40px ${F}`;g.fillText('등급',W/2,980);
+  g.save();g.translate(W/2-168,672);g.scale(14,14);g.lineCap='round';g.lineJoin='round';
+  [[cssv('--o'+s.grade,GO[s.grade]),6.4],[cssv('--g'+s.grade,GC[s.grade]),3]].forEach(([col,w])=>{g.strokeStyle=col;g.lineWidth=w;GICON[s.grade].forEach(d=>g.stroke(new Path2D(d)))});g.restore();
   g.fillStyle='#fff';g.font=`400 64px ${F}`;g.fillText(GRADE_INFO[s.grade][0],W/2,1130);
   const items=[['승률',Math.round(s.wr*100)+'%'],['K/D',s.kd.toFixed(2)],['ACS',Math.round(s.acs)],['ADR',Math.round(s.adr)],['헤드샷',Math.round(s.hs)+'%'],['RR 변동',rrSum(c).n?sgn(rrSum(c).sum):'-']];
   items.forEach((it,i)=>{const x=150+(i%3)*390,y=1230+Math.floor(i/3)*210;
